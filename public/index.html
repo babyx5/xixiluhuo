@@ -61,10 +61,6 @@
   .side-tab.active { background:var(--brand); color:#fff; box-shadow:0 4px 12px rgba(91,140,106,.3); }
   .side-tab.active::before { content:''; position:absolute; left:-12px; top:50%; transform:translateY(-50%); width:3px; height:24px; background:var(--brand-dark); border-radius:0 3px 3px 0; }
 
-  .mobile-tab-wrap { display:none; }
-  .mobile-tab-select { width:100%; padding:11px 14px; border:1px solid var(--line); border-radius:10px; font-size:14px; font-family:inherit; color:var(--ink); background:var(--card); outline:none; transition:.2s; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235A6B5A' d='M1 1l5 5 5-5' stroke='%235A6B5A' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; cursor:pointer; }
-  .mobile-tab-select:focus { border-color:var(--brand); box-shadow:0 0 0 3px rgba(91,140,106,.12); }
-
   .content-box { background:var(--card); border-radius:var(--radius); border:1px solid var(--line); padding:32px 36px; height:520px; display:flex; flex-direction:column; overflow:hidden; }
   .content-box h2 { font-family:'Noto Serif SC',serif; font-size:22px; font-weight:700; margin-bottom:16px; padding-bottom:14px; border-bottom:2px solid var(--line); flex-shrink:0; }
   .content-body { font-size:15px; color:var(--ink2); line-height:1.9; flex:1; overflow-y:scroll; padding-right:8px; }
@@ -179,12 +175,8 @@
   .modal-foot { padding:0 24px 20px; display:flex; gap:10px; justify-content:flex-end; }
 
   @media (max-width:900px) {
-    .main-content { grid-template-columns:1fr; align-items:start; }
-    .side-tabs { display:flex; flex-direction:row; gap:8px; overflow-x:auto; padding:8px 10px; height:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; flex:none; }
-    .side-tabs::-webkit-scrollbar { display:none; }
-    .side-tab { margin-bottom:0; white-space:nowrap; flex-shrink:0; padding:8px 16px; border-radius:18px; border:1px solid var(--line); background:var(--bg); max-width:200px; overflow:hidden; text-overflow:ellipsis; }
-    .side-tab:hover { background:#fff; }
-    .side-tab.active { background:var(--brand); color:#fff; box-shadow:0 3px 10px rgba(91,140,106,.3); border-color:var(--brand); }
+    .main-content { grid-template-columns:170px 1fr; gap:16px; align-items:stretch; }
+    .side-tabs { height:auto; }
     .side-tab.active::before { display:none; }
     .content-box { height:auto; padding:24px; }
     .content-body { overflow:visible; padding-right:0; flex:none; }
@@ -197,11 +189,11 @@
     .main-header { padding:24px 16px 20px; }
     .main-header h1 { font-size:24px; }
     .main-header p { font-size:14px; }
-    .main-content { padding:0 12px 28px; gap:14px; }
-    .side-tabs { display:none; }
-    .mobile-tab-wrap { display:block; }
-    .content-box { padding:18px 16px; }
-    .content-box h2 { font-size:18px; }
+    .main-content { padding:0 12px 28px; gap:12px; grid-template-columns:100px 1fr; }
+    .side-tabs { padding:8px; gap:2px; }
+    .side-tab { padding:10px 6px; font-size:13px; text-align:center; white-space:normal; word-break:break-all; }
+    .content-box { padding:16px 14px; }
+    .content-box h2 { font-size:17px; }
     .content-body { font-size:14px; line-height:1.85; }
     .content-body img { max-height:240px; }
     .form-grid2 { grid-template-columns:1fr; }
@@ -253,9 +245,6 @@
   </div>
   <div class="main-content">
     <aside class="side-tabs" id="sideTabs"></aside>
-    <div class="mobile-tab-wrap">
-      <select class="mobile-tab-select" id="mobileTabSelect" aria-label="切换标签"></select>
-    </div>
     <div class="content-box">
       <h2 id="contentTitle">标签标题</h2>
       <div class="content-body" id="contentBody"></div>
@@ -479,16 +468,6 @@ function renderMain() {
     btn.onclick = () => switchTab(t.id);
     side.appendChild(btn);
   });
-  const sel = document.getElementById('mobileTabSelect');
-  sel.innerHTML = '';
-  siteData.main.tabs.forEach(t => {
-    const opt = document.createElement('option');
-    opt.value = t.id;
-    opt.textContent = t.name;
-    sel.appendChild(opt);
-  });
-  sel.value = currentTab || '';
-  sel.onchange = () => switchTab(sel.value);
   updateContent();
 
   document.getElementById('f_copyright').textContent = siteData.footer.copyright;
@@ -509,8 +488,6 @@ function switchTab(id) {
   document.querySelectorAll('.side-tab').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tabId === id);
   });
-  const sel = document.getElementById('mobileTabSelect');
-  if (sel) sel.value = id;
   updateContent();
 }
 
