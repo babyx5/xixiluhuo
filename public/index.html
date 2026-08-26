@@ -176,20 +176,30 @@
 
   @media (max-width:900px) {
     .main-content { grid-template-columns:1fr; align-items:start; }
-    .side-tabs { display:flex; flex-direction:row; gap:6px; overflow-x:auto; padding:8px; height:auto; }
-    .side-tab { margin-bottom:0; white-space:nowrap; flex-shrink:0; }
+    .side-tabs { display:flex; flex-direction:row; gap:8px; overflow-x:auto; padding:8px 10px; height:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; flex:none; }
+    .side-tabs::-webkit-scrollbar { display:none; }
+    .side-tab { margin-bottom:0; white-space:nowrap; flex-shrink:0; padding:8px 16px; border-radius:18px; border:1px solid var(--line); background:var(--bg); max-width:200px; overflow:hidden; text-overflow:ellipsis; }
+    .side-tab:hover { background:#fff; }
+    .side-tab.active { background:var(--brand); color:#fff; box-shadow:0 3px 10px rgba(91,140,106,.3); border-color:var(--brand); }
     .side-tab.active::before { display:none; }
     .content-box { height:auto; padding:24px; }
     .content-body { overflow:visible; padding-right:0; flex:none; }
+    .content-body img { max-height:300px; }
     .stats-cards { grid-template-columns:1fr; }
     .admin-pwd-box input { width:100px; }
   }
   @media (max-width:640px) {
     .welcome-btn { padding:12px 28px; font-size:15px; }
-    .main-header { padding:32px 20px 24px; }
-    .main-content { padding:0 16px 32px; gap:16px; }
-    .content-box { padding:20px; }
-    .content-box h2 { font-size:19px; }
+    .main-header { padding:24px 16px 20px; }
+    .main-header h1 { font-size:24px; }
+    .main-header p { font-size:14px; }
+    .main-content { padding:0 12px 28px; gap:14px; }
+    .side-tabs { padding:6px 8px; gap:6px; }
+    .side-tab { padding:7px 14px; font-size:13px; max-width:160px; }
+    .content-box { padding:18px 16px; }
+    .content-box h2 { font-size:18px; }
+    .content-body { font-size:14px; line-height:1.85; }
+    .content-body img { max-height:240px; }
     .form-grid2 { grid-template-columns:1fr; }
     .panel { padding:18px; }
     .list-item { flex-wrap:wrap; }
