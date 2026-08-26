@@ -1,0 +1,12 @@
+{
+  "name": "website-fullstack",
+  "version": "1.0.0",
+  "description": "产品展示网站（含后端数据共享与访问统计）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

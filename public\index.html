@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>欢迎</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #EDF3ED; --bg2: #E4EEE4; --card: #FFFFFF;
+    --ink: #2B3A2B; --ink2: #5A6B5A; --ink3: #9AAA9A;
+    --brand: #5B8C6A; --brand2: #6B9D7B; --brand-dark: #3F6B4E;
+    --accent: #7DB88A; --line: #D5E0D5; --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans SC',-apple-system,sans-serif; background:var(--bg); color:var(--ink); line-height:1.7; }
+  img { max-width:100%; display:block; }
+  button { font-family:inherit; cursor:pointer; border:none; background:none; }
+  a { color:inherit; text-decoration:none; }
+  .hide { display:none !important; }
+
+  .admin-entry { position:fixed; top:16px; right:16px; z-index:60; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.9); backdrop-filter:blur(8px); box-shadow:0 2px 12px rgba(0,0,0,.1); display:flex; align-items:center; justify-content:center; color:var(--brand-dark); transition:.2s; }
+  .admin-entry:hover { background:var(--brand); color:#fff; transform:scale(1.08); }
+  .admin-entry svg { width:18px; height:18px; }
+
+  /* 欢迎页 */
+  .welcome-page { min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #EDF3ED 0%, #D8E8D8 50%, #C8DEC8 100%); position:relative; overflow:hidden; padding:20px; }
+  .welcome-page::before { content:''; position:absolute; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle, rgba(125,184,138,.3) 0%, transparent 70%); top:-150px; right:-100px; }
+  .welcome-page::after { content:''; position:absolute; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(91,140,106,.2) 0%, transparent 70%); bottom:-120px; left:-80px; }
+  .welcome-content { text-align:center; position:relative; z-index:2; max-width:600px; }
+  .welcome-eyebrow { display:inline-block; font-size:13px; font-weight:500; letter-spacing:3px; color:var(--brand-dark); background:rgba(255,255,255,.6); padding:5px 18px; border-radius:20px; margin-bottom:28px; backdrop-filter:blur(4px); }
+  .welcome-title { font-family:'Noto Serif SC',serif; font-size:clamp(32px,6vw,56px); font-weight:700; line-height:1.25; margin-bottom:20px; }
+  .welcome-subtitle { font-size:clamp(15px,2.5vw,18px); color:var(--ink2); line-height:1.8; margin-bottom:44px; max-width:480px; margin-left:auto; margin-right:auto; }
+  .welcome-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .welcome-btn { padding:14px 36px; border-radius:30px; font-size:16px; font-weight:500; transition:.25s; display:inline-flex; align-items:center; gap:8px; }
+  .welcome-btn.primary { background:var(--brand-dark); color:#fff; box-shadow:0 6px 20px rgba(63,107,78,.3); }
+  .welcome-btn.primary:hover { background:var(--brand); transform:translateY(-2px); box-shadow:0 8px 28px rgba(63,107,78,.4); }
+  .welcome-btn.outline { background:rgba(255,255,255,.7); color:var(--brand-dark); border:2px solid var(--brand-dark); backdrop-filter:blur(4px); }
+  .welcome-btn.outline:hover { background:var(--brand-dark); color:#fff; transform:translateY(-2px); }
+
+  /* 主页面 */
+  .main-page { min-height:100vh; display:flex; flex-direction:column; }
+  .main-topbar { background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:40; }
+  .main-topbar-inner { max-width:1200px; margin:0 auto; padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; }
+  .back-btn { display:flex; align-items:center; gap:6px; font-size:14px; font-weight:500; color:var(--ink2); padding:7px 14px; border-radius:20px; transition:.2s; }
+  .back-btn:hover { background:var(--bg); color:var(--brand-dark); }
+  .back-btn svg { width:16px; height:16px; }
+  .topbar-admin { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:var(--ink2); padding:7px 14px; border-radius:20px; border:1px solid var(--line); transition:.2s; background:var(--bg); }
+  .topbar-admin:hover { border-color:var(--brand); color:var(--brand-dark); }
+  .topbar-admin svg { width:14px; height:14px; }
+
+  .main-header { max-width:1200px; margin:0 auto; padding:48px 24px 32px; text-align:center; }
+  .main-header h1 { font-family:'Noto Serif SC',serif; font-size:clamp(26px,4.5vw,40px); font-weight:700; line-height:1.3; margin-bottom:14px; }
+  .main-header p { font-size:clamp(14px,2vw,16px); color:var(--ink2); max-width:640px; margin:0 auto; line-height:1.8; }
+
+  .main-content { max-width:1200px; margin:0 auto; padding:0 24px 48px; display:grid; grid-template-columns:240px 1fr; gap:24px; flex:1; align-items:stretch; }
+  .side-tabs { background:var(--card); border-radius:var(--radius); border:1px solid var(--line); padding:12px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; }
+  .side-tab { display:block; width:100%; text-align:left; padding:12px 16px; border-radius:8px; font-size:14px; font-weight:500; color:var(--ink2); transition:.2s; margin-bottom:4px; position:relative; }
+  .side-tab:last-child { margin-bottom:0; }
+  .side-tab:hover { background:var(--bg); color:var(--brand-dark); }
+  .side-tab.active { background:var(--brand); color:#fff; box-shadow:0 4px 12px rgba(91,140,106,.3); }
+  .side-tab.active::before { content:''; position:absolute; left:-12px; top:50%; transform:translateY(-50%); width:3px; height:24px; background:var(--brand-dark); border-radius:0 3px 3px 0; }
+
+  .content-box { background:var(--card); border-radius:var(--radius); border:1px solid var(--line); padding:32px 36px; height:520px; display:flex; flex-direction:column; overflow:hidden; }
+  .content-box h2 { font-family:'Noto Serif SC',serif; font-size:22px; font-weight:700; margin-bottom:16px; padding-bottom:14px; border-bottom:2px solid var(--line); flex-shrink:0; }
+  .content-body { font-size:15px; color:var(--ink2); line-height:1.9; flex:1; overflow-y:scroll; padding-right:8px; }
+  .content-body p { margin-bottom:14px; }
+  .content-body img { border-radius:8px; margin:16px 0; max-height:360px; object-fit:cover; }
+  .content-body a { color:var(--brand-dark); text-decoration:underline; }
+  .content-empty { text-align:center; padding:60px 20px; color:var(--ink3); }
+  .content-body::-webkit-scrollbar, .side-tabs::-webkit-scrollbar { width:5px; }
+  .content-body::-webkit-scrollbar-thumb, .side-tabs::-webkit-scrollbar-thumb { background:var(--line); border-radius:3px; }
+  .content-body::-webkit-scrollbar-thumb:hover, .side-tabs::-webkit-scrollbar-thumb:hover { background:var(--brand2); }
+
+  .main-footer { background:var(--card); border-top:1px solid var(--line); padding:28px 24px; margin-top:auto; }
+  .footer-inner { max-width:1200px; margin:0 auto; text-align:center; }
+  .footer-links { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+  .footer-links a { font-size:13px; color:var(--ink2); transition:.2s; }
+  .footer-links a:hover { color:var(--brand-dark); }
+  .footer-info { font-size:12px; color:var(--ink3); line-height:1.8; }
+
+  /* 管理后台 */
+  .admin-page { min-height:100vh; background:var(--bg); }
+  .admin-top { position:sticky; top:0; z-index:50; background:var(--brand-dark); color:#fff; }
+  .admin-top-inner { max-width:1100px; margin:0 auto; padding:0 20px; height:56px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .admin-top-title { font-size:16px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .admin-top-title svg { width:18px; height:18px; }
+  .admin-pwd-box { display:flex; align-items:center; gap:8px; }
+  .admin-pwd-box input { padding:6px 12px; border-radius:6px; border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.15); color:#fff; font-size:13px; outline:none; width:140px; }
+  .admin-pwd-box input::placeholder { color:rgba(255,255,255,.6); }
+  .admin-pwd-box input:focus { border-color:#fff; background:rgba(255,255,255,.25); }
+  .admin-pwd-status { font-size:12px; padding:4px 10px; border-radius:12px; }
+  .admin-pwd-status.ok { background:rgba(125,184,138,.3); color:#a8e6b3; }
+  .admin-pwd-status.no { background:rgba(255,100,100,.25); color:#ffb3b3; }
+  .admin-back { display:flex; align-items:center; gap:6px; padding:7px 16px; border-radius:20px; font-size:13px; font-weight:500; color:#fff; border:1px solid rgba(255,255,255,.3); transition:.2s; flex-shrink:0; }
+  .admin-back:hover { background:rgba(255,255,255,.15); }
+  .admin-back svg { width:14px; height:14px; }
+
+  .admin-body { max-width:1100px; margin:0 auto; padding:24px 20px 60px; }
+  .admin-tabs { display:flex; gap:4px; margin-bottom:24px; background:var(--card); border-radius:10px; padding:5px; border:1px solid var(--line); overflow-x:auto; }
+  .admin-tab { padding:10px 18px; border-radius:7px; font-size:14px; font-weight:500; color:var(--ink2); white-space:nowrap; transition:.2s; flex-shrink:0; }
+  .admin-tab:hover { background:var(--bg); }
+  .admin-tab.active { background:var(--brand); color:#fff; }
+
+  .panel { background:var(--card); border-radius:var(--radius); border:1px solid var(--line); padding:24px; }
+  .panel h2 { font-size:17px; font-weight:600; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+
+  .form-row { margin-bottom:16px; }
+  .form-row:last-child { margin-bottom:0; }
+  .form-row label { display:block; font-size:13px; font-weight:500; color:var(--ink2); margin-bottom:6px; }
+  .form-row input, .form-row textarea, .form-row select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:7px; font-size:14px; font-family:inherit; color:var(--ink); background:var(--bg); outline:none; transition:.2s; }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { border-color:var(--brand); box-shadow:0 0 0 3px rgba(91,140,106,.12); }
+  .form-row textarea { resize:vertical; min-height:100px; line-height:1.7; }
+  .form-hint { font-size:12px; color:var(--ink3); margin-top:4px; }
+  .form-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+  .btn { padding:10px 22px; border-radius:7px; font-size:14px; font-weight:500; transition:.2s; display:inline-flex; align-items:center; gap:6px; }
+  .btn-primary { background:var(--brand); color:#fff; }
+  .btn-primary:hover { background:var(--brand-dark); }
+  .btn-ghost { background:var(--bg); color:var(--ink2); border:1px solid var(--line); }
+  .btn-ghost:hover { border-color:var(--brand); color:var(--brand-dark); }
+  .btn-danger { background:#C0392B; color:#fff; }
+  .btn-danger:hover { background:#A93226; }
+  .btn-sm { padding:6px 14px; font-size:13px; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .btn svg { width:15px; height:15px; }
+
+  .list { display:flex; flex-direction:column; gap:10px; }
+  .list-item { display:flex; align-items:center; gap:14px; padding:14px 16px; background:var(--bg); border-radius:8px; border:1px solid var(--line); }
+  .list-item-info { flex:1; min-width:0; }
+  .list-item-name { font-size:14px; font-weight:500; margin-bottom:2px; }
+  .list-item-meta { font-size:12px; color:var(--ink3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .list-item-actions { display:flex; gap:6px; flex-shrink:0; }
+
+  .add-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .add-bar h3 { font-size:15px; font-weight:600; }
+
+  /* 统计面板 */
+  .stats-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+  .stat-card { background:var(--bg); border-radius:10px; padding:20px; text-align:center; border:1px solid var(--line); }
+  .stat-card .num { font-family:'Noto Serif SC',serif; font-size:32px; font-weight:700; color:var(--brand-dark); line-height:1.2; }
+  .stat-card .label { font-size:13px; color:var(--ink2); margin-top:6px; }
+  .stats-section { margin-bottom:24px; }
+  .stats-section h3 { font-size:15px; font-weight:600; margin-bottom:14px; color:var(--ink); }
+  .daily-chart { display:flex; align-items:flex-end; gap:6px; height:120px; padding:10px 0; border-bottom:1px solid var(--line); overflow-x:auto; }
+  .daily-bar { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:36px; flex-shrink:0; }
+  .daily-bar .bar { width:24px; background:linear-gradient(180deg, var(--brand2), var(--brand)); border-radius:4px 4px 0 0; min-height:4px; transition:.3s; }
+  .daily-bar .bar:hover { background:var(--brand-dark); }
+  .daily-bar .day { font-size:10px; color:var(--ink3); white-space:nowrap; }
+  .visitor-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .visitor-table th { text-align:left; padding:10px 12px; background:var(--bg); color:var(--ink2); font-weight:500; border-bottom:2px solid var(--line); white-space:nowrap; }
+  .visitor-table td { padding:10px 12px; border-bottom:1px solid var(--line); color:var(--ink); }
+  .visitor-table tr:hover td { background:var(--bg); }
+  .visitor-table .ip { font-family:monospace; font-size:12px; color:var(--brand-dark); }
+  .visitor-table .count { font-weight:600; color:var(--brand-dark); }
+  .visitor-table .time { font-size:12px; color:var(--ink2); white-space:nowrap; }
+  .stats-empty { text-align:center; padding:40px; color:var(--ink3); font-size:14px; }
+
+  .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--ink); color:#fff; padding:11px 22px; border-radius:24px; font-size:13px; z-index:999; opacity:0; transition:.3s; pointer-events:none; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .loading-mask { position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; z-index:1000; flex-direction:column; gap:16px; }
+  .loading-spinner { width:40px; height:40px; border:3px solid var(--line); border-top-color:var(--brand); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { font-size:14px; color:var(--ink2); }
+
+  .modal-mask { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-mask.show { display:flex; }
+  .modal { background:var(--card); border-radius:12px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+  .modal-head { padding:20px 24px 0; display:flex; justify-content:space-between; align-items:center; }
+  .modal-head h3 { font-size:17px; font-weight:600; }
+  .modal-close { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--ink3); transition:.2s; }
+  .modal-close:hover { background:var(--bg); color:var(--ink); }
+  .modal-close svg { width:16px; height:16px; }
+  .modal-body { padding:18px 24px; }
+  .modal-foot { padding:0 24px 20px; display:flex; gap:10px; justify-content:flex-end; }
+
+  @media (max-width:900px) {
+    .main-content { grid-template-columns:1fr; align-items:start; }
+    .side-tabs { display:flex; flex-direction:row; gap:6px; overflow-x:auto; padding:8px; height:auto; }
+    .side-tab { margin-bottom:0; white-space:nowrap; flex-shrink:0; }
+    .side-tab.active::before { display:none; }
+    .content-box { height:auto; padding:24px; }
+    .content-body { overflow:visible; padding-right:0; flex:none; }
+    .stats-cards { grid-template-columns:1fr; }
+    .admin-pwd-box input { width:100px; }
+  }
+  @media (max-width:640px) {
+    .welcome-btn { padding:12px 28px; font-size:15px; }
+    .main-header { padding:32px 20px 24px; }
+    .main-content { padding:0 16px 32px; gap:16px; }
+    .content-box { padding:20px; }
+    .content-box h2 { font-size:19px; }
+    .form-grid2 { grid-template-columns:1fr; }
+    .panel { padding:18px; }
+    .list-item { flex-wrap:wrap; }
+    .list-item-actions { width:100%; justify-content:flex-end; }
+    .admin-entry { width:36px; height:36px; top:12px; right:12px; }
+    .admin-top-inner { flex-wrap:wrap; height:auto; padding:10px 20px; gap:8px; }
+    .admin-pwd-box { order:3; width:100%; }
+    .admin-pwd-box input { flex:1; width:auto; }
+    .visitor-table { font-size:12px; }
+    .visitor-table th, .visitor-table td { padding:8px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-mask" id="loadingMask">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">正在加载...</div>
+</div>
+
+<!-- 欢迎页 -->
+<div id="welcomeView" class="welcome-page hide">
+  <div class="welcome-content">
+    <span class="welcome-eyebrow" id="w_eyebrow">WELCOME</span>
+    <h1 class="welcome-title" id="w_title">欢迎来到我们的平台</h1>
+    <p class="welcome-subtitle" id="w_subtitle">探索更多精彩内容</p>
+    <div class="welcome-buttons">
+      <button class="welcome-btn primary" id="w_btn1" onclick="goMain()">点击了解</button>
+      <button class="welcome-btn outline" id="w_btn2" onclick="goMain()">加入我们</button>
+    </div>
+  </div>
+</div>
+
+<!-- 主页面 -->
+<div id="mainView" class="main-page hide">
+  <header class="main-topbar">
+    <div class="main-topbar-inner">
+      <button class="back-btn" onclick="goWelcome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        返回首页
+      </button>
+    </div>
+  </header>
+  <div class="main-header">
+    <h1 id="m_title">关于我们</h1>
+    <p id="m_subtitle">简介文字</p>
+  </div>
+  <div class="main-content">
+    <aside class="side-tabs" id="sideTabs"></aside>
+    <div class="content-box">
+      <h2 id="contentTitle">标签标题</h2>
+      <div class="content-body" id="contentBody"></div>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <div class="footer-inner">
+      <div class="footer-links" id="footerLinks"></div>
+      <div class="footer-info">
+        <span id="f_copyright">© 2026</span>
+        <span style="margin:0 8px;">|</span>
+        <span id="f_icp">ICP备案号</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- 管理后台 -->
+<div id="adminView" class="admin-page hide">
+  <header class="admin-top">
+    <div class="admin-top-inner">
+      <div class="admin-top-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        内容管理后台
+      </div>
+      <div class="admin-pwd-box">
+        <input type="password" id="adminPwd" placeholder="管理密码" onkeydown="if(event.key==='Enter')checkPwd()">
+        <button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff;" onclick="checkPwd()">验证</button>
+        <span class="admin-pwd-status no" id="pwdStatus">未验证</span>
+      </div>
+      <button class="admin-back" onclick="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        返回
+      </button>
+    </div>
+  </header>
+  <div class="admin-body">
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminTab('welcome',this)">欢迎页</button>
+      <button class="admin-tab" onclick="switchAdminTab('main',this)">主页面</button>
+      <button class="admin-tab" onclick="switchAdminTab('tab',this)">标签内容</button>
+      <button class="admin-tab" onclick="switchAdminTab('footer',this)">底部与链接</button>
+      <button class="admin-tab" onclick="switchAdminTab('stats',this)">访问统计</button>
+    </div>
+
+    <div class="panel" id="panelWelcome">
+      <h2>欢迎页内容</h2>
+      <div class="form-row"><label>顶部小标签</label><input id="aw_eyebrow" placeholder="WELCOME"></div>
+      <div class="form-row"><label>大标题</label><input id="aw_title"></div>
+      <div class="form-row"><label>副标题 / 描述</label><textarea id="aw_subtitle"></textarea></div>
+      <div class="form-grid2">
+        <div class="form-row"><label>按钮一文字</label><input id="aw_btn1"></div>
+        <div class="form-row"><label>按钮二文字</label><input id="aw_btn2"></div>
+      </div>
+      <div style="margin-top:8px;"><button class="btn btn-primary" onclick="saveContent()">保存欢迎页</button></div>
+    </div>
+
+    <div class="panel hide" id="panelMain">
+      <h2>主页面内容</h2>
+      <div class="form-row"><label>页面大标题</label><input id="am_title"></div>
+      <div class="form-row"><label>页面简介</label><textarea id="am_subtitle"></textarea></div>
+      <div style="margin-top:8px;"><button class="btn btn-primary" onclick="saveContent()">保存主页面</button></div>
+    </div>
+
+    <div class="panel hide" id="panelTab">
+      <div class="add-bar"><h2>标签内容列表</h2><button class="btn btn-primary btn-sm" onclick="openTabModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>添加标签</button></div>
+      <div class="list" id="tabList"></div>
+    </div>
+
+    <div class="panel hide" id="panelFooter">
+      <h2>底部信息</h2>
+      <div class="form-grid2">
+        <div class="form-row"><label>版权信息</label><input id="af_copyright"></div>
+        <div class="form-row"><label>备案号</label><input id="af_icp"></div>
+      </div>
+      <div class="add-bar" style="margin-top:24px;"><h2>友情链接</h2><button class="btn btn-primary btn-sm" onclick="openLinkModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>添加链接</button></div>
+      <div class="list" id="linkList"></div>
+      <div style="margin-top:16px;"><button class="btn btn-primary" onclick="saveContent()">保存底部信息</button></div>
+    </div>
+
+    <div class="panel hide" id="panelStats">
+      <h2>访问统计</h2>
+      <div id="statsContent"><div class="stats-empty">请先验证管理密码后查看统计数据</div></div>
+      <div style="margin-top:16px;"><button class="btn btn-ghost" onclick="loadStats()">刷新统计</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="modal-mask" id="modalMask" onclick="closeModalOnMask(event)">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let siteData = null;
+let currentTab = null;
+let adminTab = 'welcome';
+let editId = null;
+let pwdVerified = false;
+let lastView = 'welcome';
+
+// ===== API 请求 =====
+async function api(url, options = {}) {
+  try {
+    const res = await fetch(url, options);
+    const data = await res.json();
+    return { ok: res.ok, data };
+  } catch (e) {
+    return { ok: false, data: { error: '网络请求失败：' + e.message } };
+  }
+}
+
+// ===== 加载内容 =====
+async function loadContent() {
+  const { ok, data } = await api('/api/content');
+  if (ok && data.content) {
+    siteData = data.content;
+    return true;
+  }
+  return false;
+}
+
+// ===== 记录访问 =====
+async function trackVisit() {
+  try { await fetch('/api/track', { method: 'POST' }); } catch(e) {}
+}
+
+// ===== 保存内容 =====
+async function saveContent() {
+  if (!pwdVerified) { toast('请先验证管理密码'); return; }
+  // 从表单收集数据
+  siteData.welcome.eyebrow = document.getElementById('aw_eyebrow').value.trim();
+  siteData.welcome.title = document.getElementById('aw_title').value.trim() || '欢迎';
+  siteData.welcome.subtitle = document.getElementById('aw_subtitle').value.trim();
+  siteData.welcome.btn1 = document.getElementById('aw_btn1').value.trim() || '点击了解';
+  siteData.welcome.btn2 = document.getElementById('aw_btn2').value.trim() || '加入我们';
+  siteData.main.title = document.getElementById('am_title').value.trim() || '关于我们';
+  siteData.main.subtitle = document.getElementById('am_subtitle').value.trim();
+  siteData.footer.copyright = document.getElementById('af_copyright').value.trim();
+  siteData.footer.icp = document.getElementById('af_icp').value.trim();
+
+  const { ok, data } = await api('/api/content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: document.getElementById('adminPwd').value, content: siteData })
+  });
+  if (ok) {
+    toast('保存成功');
+    renderAll();
+  } else {
+    toast('保存失败：' + (data.error || '未知错误'));
+  }
+}
+
+// ===== 密码验证 =====
+function checkPwd() {
+  const pwd = document.getElementById('adminPwd').value;
+  if (!pwd) { toast('请输入管理密码'); return; }
+  // 尝试用密码获取统计来验证
+  api('/api/stats?password=' + encodeURIComponent(pwd)).then(({ ok }) => {
+    pwdVerified = ok;
+    document.getElementById('pwdStatus').textContent = ok ? '已验证' : '密码错误';
+    document.getElementById('pwdStatus').className = 'admin-pwd-status ' + (ok ? 'ok' : 'no');
+    if (ok) { toast('密码验证成功'); if (adminTab === 'stats') loadStats(); }
+    else toast('管理密码错误');
+  });
+}
+
+// ===== 路由 =====
+function goWelcome() { location.hash = 'welcome'; }
+function goMain() { location.hash = 'main'; }
+function goAdmin() { lastView = location.hash.replace('#','') || 'welcome'; location.hash = 'admin'; }
+function goBack() { location.hash = lastView === 'admin' ? 'welcome' : lastView; }
+
+function checkRoute() {
+  const hash = location.hash.replace('#','') || 'welcome';
+  document.getElementById('welcomeView').classList.toggle('hide', hash !== 'welcome');
+  document.getElementById('mainView').classList.toggle('hide', hash !== 'main');
+  document.getElementById('adminView').classList.toggle('hide', hash !== 'admin');
+  if (hash === 'admin') renderAdmin();
+}
+window.addEventListener('hashchange', checkRoute);
+
+// ===== 渲染 =====
+function renderAll() {
+  renderWelcome();
+  renderMain();
+}
+
+function renderWelcome() {
+  const w = siteData.welcome;
+  document.getElementById('w_eyebrow').textContent = w.eyebrow;
+  document.getElementById('w_title').textContent = w.title;
+  document.getElementById('w_subtitle').textContent = w.subtitle;
+  document.getElementById('w_btn1').textContent = w.btn1;
+  document.getElementById('w_btn2').textContent = w.btn2;
+  document.title = w.title;
+}
+
+function renderMain() {
+  document.getElementById('m_title').textContent = siteData.main.title;
+  document.getElementById('m_subtitle').textContent = siteData.main.subtitle;
+  document.title = siteData.main.title;
+
+  if (!currentTab || !siteData.main.tabs.find(t => t.id === currentTab)) {
+    currentTab = siteData.main.tabs[0]?.id || null;
+  }
+  const side = document.getElementById('sideTabs');
+  side.innerHTML = '';
+  siteData.main.tabs.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'side-tab' + (t.id === currentTab ? ' active' : '');
+    btn.textContent = t.name;
+    btn.dataset.tabId = t.id;
+    btn.onclick = () => switchTab(t.id);
+    side.appendChild(btn);
+  });
+  updateContent();
+
+  document.getElementById('f_copyright').textContent = siteData.footer.copyright;
+  document.getElementById('f_icp').textContent = siteData.footer.icp;
+  const links = document.getElementById('footerLinks');
+  links.innerHTML = '';
+  siteData.footer.links.forEach(l => {
+    const a = document.createElement('a');
+    a.href = l.url; a.textContent = l.name;
+    if (l.url && l.url.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener'; }
+    links.appendChild(a);
+  });
+}
+
+function switchTab(id) {
+  if (id === currentTab) return;
+  currentTab = id;
+  document.querySelectorAll('.side-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tabId === id);
+  });
+  updateContent();
+}
+
+function updateContent() {
+  const tab = siteData.main.tabs.find(t => t.id === currentTab);
+  const body = document.getElementById('contentBody');
+  if (tab) {
+    document.getElementById('contentTitle').textContent = tab.name;
+    body.innerHTML = tab.content;
+  } else {
+    document.getElementById('contentTitle').textContent = '暂无内容';
+    body.innerHTML = '<div class="content-empty">请在管理后台添加标签内容</div>';
+  }
+  body.scrollTop = 0;
+}
+
+// ===== 后台渲染 =====
+function switchAdminTab(tab, el) {
+  adminTab = tab;
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  ['panelWelcome','panelMain','panelTab','panelFooter','panelStats'].forEach(id => {
+    document.getElementById(id).classList.toggle('hide', id !== 'panel' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  });
+  if (tab === 'tab') renderTabList();
+  if (tab === 'footer') renderLinkList();
+  if (tab === 'stats') loadStats();
+}
+
+function renderAdmin() {
+  fillForms();
+  renderTabList();
+  renderLinkList();
+}
+
+function fillForms() {
+  document.getElementById('aw_eyebrow').value = siteData.welcome.eyebrow;
+  document.getElementById('aw_title').value = siteData.welcome.title;
+  document.getElementById('aw_subtitle').value = siteData.welcome.subtitle;
+  document.getElementById('aw_btn1').value = siteData.welcome.btn1;
+  document.getElementById('aw_btn2').value = siteData.welcome.btn2;
+  document.getElementById('am_title').value = siteData.main.title;
+  document.getElementById('am_subtitle').value = siteData.main.subtitle;
+  document.getElementById('af_copyright').value = siteData.footer.copyright;
+  document.getElementById('af_icp').value = siteData.footer.icp;
+}
+
+function renderTabList() {
+  const el = document.getElementById('tabList');
+  el.innerHTML = '';
+  if (siteData.main.tabs.length === 0) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink3);font-size:14px;">暂无标签</div>'; return; }
+  siteData.main.tabs.forEach((t, i) => {
+    const plain = t.content.replace(/<[^>]+>/g, '').substring(0, 60);
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = `<div class="list-item-info"><div class="list-item-name">${i+1}. ${esc(t.name)}</div><div class="list-item-meta">${esc(plain)}${t.content.length>60?'...':''}</div></div><div class="list-item-actions"><button class="btn btn-ghost btn-sm" onclick="openTabModal('${t.id}')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteTab('${t.id}')">删除</button></div>`;
+    el.appendChild(item);
+  });
+}
+
+function openTabModal(id) {
+  editId = id || null;
+  const t = id ? siteData.main.tabs.find(x => x.id === id) : { name: '', content: '' };
+  document.getElementById('modalTitle').textContent = id ? '编辑标签' : '添加标签';
+  document.getElementById('modalBody').innerHTML = `<div class="form-row"><label>标签名称</label><input id="m_tname" value="${esc(t.name)}" placeholder="如：公司简介"></div><div class="form-row"><label>标签内容（支持HTML标签）</label><textarea id="m_tcontent" style="min-height:200px;font-family:monospace;font-size:13px;">${esc(t.content)}</textarea><div class="form-hint">可直接输入纯文字，也可用HTML标签实现排版、图片、链接等</div></div>`;
+  document.getElementById('modalFoot').innerHTML = `<button class="btn btn-ghost" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveTab()">保存</button>`;
+  showModal();
+  setTimeout(() => document.getElementById('m_tname').focus(), 100);
+}
+
+function saveTab() {
+  const name = document.getElementById('m_tname').value.trim();
+  const content = document.getElementById('m_tcontent').value;
+  if (!name) { toast('请输入标签名称'); return; }
+  if (editId) { const t = siteData.main.tabs.find(x => x.id === editId); if (t) { t.name = name; t.content = content; } }
+  else { siteData.main.tabs.push({ id: 't' + Date.now(), name, content }); }
+  closeModal(); renderTabList(); renderMain();
+  toast('标签已保存（记得点保存按钮同步到服务器）');
+}
+
+function deleteTab(id) {
+  if (!confirm('确定删除该标签？')) return;
+  siteData.main.tabs = siteData.main.tabs.filter(t => t.id !== id);
+  if (currentTab === id) currentTab = siteData.main.tabs[0]?.id || null;
+  renderTabList(); renderMain();
+  toast('标签已删除（记得点保存按钮同步到服务器）');
+}
+
+function renderLinkList() {
+  const el = document.getElementById('linkList');
+  el.innerHTML = '';
+  if (siteData.footer.links.length === 0) { el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--ink3);font-size:13px;">暂无友情链接</div>'; return; }
+  siteData.footer.links.forEach(l => {
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = `<div class="list-item-info"><div class="list-item-name">${esc(l.name)}</div><div class="list-item-meta">${esc(l.url)}</div></div><div class="list-item-actions"><button class="btn btn-ghost btn-sm" onclick="openLinkModal('${l.id}')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteLink('${l.id}')">删除</button></div>`;
+    el.appendChild(item);
+  });
+}
+
+function openLinkModal(id) {
+  editId = id || null;
+  const l = id ? siteData.footer.links.find(x => x.id === id) : { name: '', url: '' };
+  document.getElementById('modalTitle').textContent = id ? '编辑链接' : '添加链接';
+  document.getElementById('modalBody').innerHTML = `<div class="form-row"><label>链接名称</label><input id="m_lname" value="${esc(l.name)}"></div><div class="form-row"><label>链接地址</label><input id="m_lurl" value="${esc(l.url)}" placeholder="https://... 或 #"></div>`;
+  document.getElementById('modalFoot').innerHTML = `<button class="btn btn-ghost" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveLink()">保存</button>`;
+  showModal();
+}
+
+function saveLink() {
+  const name = document.getElementById('m_lname').value.trim();
+  const url = document.getElementById('m_lurl').value.trim();
+  if (!name) { toast('请输入链接名称'); return; }
+  if (editId) { const l = siteData.footer.links.find(x => x.id === editId); if (l) { l.name = name; l.url = url; } }
+  else { siteData.footer.links.push({ id: 'l' + Date.now(), name, url }); }
+  closeModal(); renderLinkList(); renderMain();
+  toast('链接已保存（记得点保存按钮同步到服务器）');
+}
+
+function deleteLink(id) {
+  if (!confirm('确定删除该链接？')) return;
+  siteData.footer.links = siteData.footer.links.filter(l => l.id !== id);
+  renderLinkList(); renderMain();
+  toast('链接已删除（记得点保存按钮同步到服务器）');
+}
+
+// ===== 访问统计 =====
+async function loadStats() {
+  if (!pwdVerified) {
+    document.getElementById('statsContent').innerHTML = '<div class="stats-empty">请先在顶部输入管理密码并验证</div>';
+    return;
+  }
+  const pwd = document.getElementById('adminPwd').value;
+  const { ok, data } = await api('/api/stats?password=' + encodeURIComponent(pwd));
+  if (!ok) {
+    document.getElementById('statsContent').innerHTML = '<div class="stats-empty">获取统计失败：' + (data.error || '') + '</div>';
+    return;
+  }
+  const el = document.getElementById('statsContent');
+  // 统计卡片
+  let html = `<div class="stats-cards">
+    <div class="stat-card"><div class="num">${data.totalVisits}</div><div class="label">总访问次数</div></div>
+    <div class="stat-card"><div class="num">${data.uniqueVisitors}</div><div class="label">独立访客数</div></div>
+    <div class="stat-card"><div class="num">${data.totalVisits > 0 ? (data.totalVisits / data.uniqueVisits).toFixed(1) : '0'}</div><div class="label">人均访问次数</div></div>
+  </div>`;
+  // 每日访问量
+  if (data.dailyStats && data.dailyStats.length > 0) {
+    const maxCount = Math.max(...data.dailyStats.map(d => d.count));
+    html += `<div class="stats-section"><h3>最近访问趋势</h3><div class="daily-chart">`;
+    data.dailyStats.slice(-14).forEach(d => {
+      const h = maxCount > 0 ? (d.count / maxCount * 100) : 4;
+      html += `<div class="daily-bar" title="${d.date}：${d.count}次"><div class="bar" style="height:${h}%"></div><div class="day">${d.date.substring(5)}</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  // 访客列表
+  html += `<div class="stats-section"><h3>访客详情（按最近访问排序）</h3>`;
+  if (data.visitors.length === 0) {
+    html += '<div class="stats-empty">暂无访问记录</div>';
+  } else {
+    html += `<div style="overflow-x:auto;"><table class="visitor-table"><thead><tr><th>IP地址</th><th>访问次数</th><th>首次访问</th><th>最近访问</th></tr></thead><tbody>`;
+    data.visitors.forEach(v => {
+      html += `<tr><td class="ip">${esc(v.ip)}</td><td class="count">${v.count}</td><td class="time">${formatTime(v.firstVisit)}</td><td class="time">${formatTime(v.lastVisit)}</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+function formatTime(iso) {
+  try {
+    const d = new Date(iso);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  } catch(e) { return iso; }
+}
+
+// ===== 工具 =====
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+let toastTimer;
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2500); }
+function showModal() { document.getElementById('modalMask').classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('modalMask').classList.remove('show'); document.body.style.overflow = ''; editId = null; }
+function closeModalOnMask(e) { if (e.target === document.getElementById('modalMask')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('modalMask').classList.contains('show')) closeModal(); });
+
+// ===== 启动 =====
+(async function init() {
+  const loaded = await loadContent();
+  document.getElementById('loadingMask').style.display = 'none';
+  if (!loaded) {
+    toast('内容加载失败，请检查服务器是否启动');
+    return;
+  }
+  renderAll();
+  checkRoute();
+  // 记录访问（仅前台页面）
+  const hash = location.hash.replace('#','') || 'welcome';
+  if (hash !== 'admin') trackVisit();
+})();
+</script>
+</body>
+</html>
