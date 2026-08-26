@@ -189,9 +189,9 @@
     .main-header { padding:24px 16px 20px; }
     .main-header h1 { font-size:24px; }
     .main-header p { font-size:14px; }
-    .main-content { padding:0 12px 28px; gap:12px; grid-template-columns:100px 1fr; }
-    .side-tabs { padding:8px; gap:2px; }
-    .side-tab { padding:10px 6px; font-size:13px; text-align:center; white-space:normal; word-break:break-all; }
+    .main-content { padding:0 12px 28px; gap:12px; grid-template-columns:1fr; }
+    .side-tabs { display:flex; flex-direction:row; flex-wrap:wrap; gap:8px; padding:10px; height:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+    .side-tab { flex:1 1 calc(25% - 6px); margin-bottom:0; padding:9px 4px; font-size:13px; text-align:center; white-space:normal; word-break:break-all; }
     .content-box { padding:16px 14px; }
     .content-box h2 { font-size:17px; }
     .content-body { font-size:14px; line-height:1.85; }
